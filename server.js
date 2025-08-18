@@ -11,6 +11,7 @@ import Hero from "./src/routes/HeroCmsRoutes.js";
 import Course from "./src/routes/CourseCmsRoutes.js";
 import Video from "./src/routes/VideoCmsRoutes.js";
 import Student from "./src/routes/StudentsCmsRoutes.js";
+import fileUploadRoutes from "./src/routes/uploadRoutes.js";
 
 dotenv.config();
 
@@ -23,7 +24,7 @@ const PORT = process.env.PORT || 3000;
 //!  Middleware
 app.use(cors()); // To allow cross-origin requests
 app.use(express.json()); // To parse JSON request bodies
-app.use("/uploads", express.static("uploads")); // Serve uploaded images if needed
+app.use("/api/uploads", fileUploadRoutes);
 
 app.use("/cms/about", AboutRoutes);
 app.use("/cms/service", ServiceRoutes);

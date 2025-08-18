@@ -1,22 +1,38 @@
 import StudentsCmsModel from "../models/StudentsCmsModel.js";
 
 // Create a new student
-export const createStudent = async (req, res) => {
+export const createOrUpdateStudentsCms = async (req, res) => {
   try {
-    const student = new StudentsCmsModel(req.body);
-    await student.save();
-    res.status(201).json(student);
+    // Check if a StudentsCms document exists
+    const existingDoc = await StudentsCmsModel.findOne();
+
+    let result;
+    if (existingDoc) {
+      // Update existing
+      result = await StudentsCmsModel.findByIdAndUpdate(
+        existingDoc._id,
+        req.body,
+        { new: true } // return updated document
+      );
+    } else {
+      // Create new
+      const newDoc = new StudentsCmsModel(req.body);
+      result = await newDoc.save();
+    }
+
+    res.status(200).json(result);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error creating student", error: error.message });
+    res.status(500).json({
+      message: "Error creating/updating Students CMS",
+      error: error.message,
+    });
   }
 };
 
 // Get all students
 export const getAllStudents = async (req, res) => {
   try {
-    const students = await StudentsCmsModel.find();
+    const students = await StudentsCmsModel.findOne();
     res.status(200).json(students);
   } catch (error) {
     res

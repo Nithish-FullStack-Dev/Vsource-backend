@@ -2,17 +2,25 @@ import Hero from "../models/HeroCmsModel.js";
 
 export const createHero = async (req, res) => {
   try {
-    const existing = await Hero.findOne();
-    if (existing) {
-      return res.status(400).json({ message: "Hero section already exists." });
+    // Check if a hero document exists
+    let hero = await Hero.findOne();
+
+    if (hero) {
+      // Update the existing hero document
+      hero.set(req.body);
+      await hero.save();
+      return res.status(200).json({ message: "Hero section updated.", hero });
+    } else {
+      // Create a new hero document
+      hero = new Hero(req.body);
+      await hero.save();
+      return res.status(201).json({ message: "Hero section created.", hero });
     }
-    const hero = new Hero(req.body);
-    await hero.save();
-    res.status(201).json(hero);
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Error creating hero", error: err.message });
+    res.status(500).json({
+      message: "Error creating/updating hero",
+      error: err.message,
+    });
   }
 };
 

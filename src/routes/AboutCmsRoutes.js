@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  createAbout,
+  createOrUpdateAbout,
   deleteAbout,
   getAbout,
   getAboutCms,
@@ -9,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.post("/addAboutCms", createAbout);
+router.post("/addAboutCms", createOrUpdateAbout);
 router.get("/getAllAboutCms", getAbout);
 router.get("/getAboutCms", getAboutCms);
 router.put("/updateAboutCms/:id", updateAbout);

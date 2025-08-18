@@ -1,15 +1,30 @@
 import AboutCms from "../models/AboutCmsModel.js";
 
 //! Create
-export const createAbout = async (req, res) => {
+export const createOrUpdateAbout = async (req, res) => {
   try {
-    const about = new AboutCms(req.body);
-    await about.save();
-    res.status(201).json(about);
+    let about;
+
+    // Check if About already exists (assuming only one About section)
+    const existingAbout = await AboutCms.findOne();
+
+    if (existingAbout) {
+      // Update the existing About
+      about = await AboutCms.findByIdAndUpdate(existingAbout._id, req.body, {
+        new: true,
+      });
+    } else {
+      // Create a new About
+      about = new AboutCms(req.body);
+      await about.save();
+    }
+
+    res.status(200).json(about);
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Error creating About section", error: err });
+    res.status(500).json({
+      message: "Error creating or updating About section",
+      error: err.message,
+    });
   }
 };
 

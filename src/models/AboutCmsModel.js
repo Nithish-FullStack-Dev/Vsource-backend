@@ -1,33 +1,28 @@
 import mongoose from "mongoose";
 
-const statSchema = new mongoose.Schema({
-  studentsNo: {
-    value: { type: Number, default: 0 },
-    label: { type: String, default: "" },
-    icon: { type: String, default: "" },
-  },
-  experience: {
-    value: { type: Number, default: 0 },
-    label: { type: String, default: "" },
-    icon: { type: String, default: "" },
-  },
-  destinations: {
-    value: { type: Number, default: 0 },
-    label: { type: String, default: "" },
-    icon: { type: String, default: "" },
-  },
+const contentItemSchema = new mongoose.Schema({
+  icon: { type: String, default: "" },
+  text: { type: String, default: "" },
 });
 
-const AboutSchema = new mongoose.Schema(
+const statItemSchema = new mongoose.Schema({
+  value: { type: String, default: "" },
+  label: { type: String, default: "" },
+  icon: { type: String, default: "" },
+});
+
+const aboutSectionSchema = new mongoose.Schema(
   {
     title: { type: String, default: "" },
-    paragraph1: { type: String, default: "" },
-    paragraph2: { type: String, default: "" },
-    stats: {
-      type: statSchema,
+    paragraph: { type: String, default: "" },
+    contents: [contentItemSchema],
+    mainImage: {
+      url: { type: String, default: "" },
+      quote: { type: String, default: "" },
     },
+    stats: [statItemSchema],
   },
   { timestamps: true }
 );
 
-export default mongoose.model("AboutCms", AboutSchema);
+export default mongoose.model("AboutSectionCMS", aboutSectionSchema);
